@@ -1,6 +1,5 @@
+import 'package:division/src/function/hex_color.dart';
 import 'package:flutter/material.dart';
-
-import 'hex_color.dart';
 
 /// Returns [Color].
 ///
@@ -9,7 +8,7 @@ import 'hex_color.dart';
 /// ```dart
 /// ..backgroundColor(rgb(34, 29, 189));
 /// ```
-Color rgb(int r, int g, int b) {
+Color rgb(final int r, final int g, final int b) {
   return Color.fromRGBO(r, g, b, 1.0);
 }
 
@@ -20,7 +19,12 @@ Color rgb(int r, int g, int b) {
 /// ```dart
 /// ..backgroundColor(rgba(34, 29, 189, 0.7));
 /// ```
-Color rgba(int r, int g, int b, [double opacity = 1.0]) {
+Color rgba(
+  final int r,
+  final int g,
+  final int b, [
+  final double opacity = 1.0,
+]) {
   return Color.fromRGBO(r, g, b, opacity);
 }
 
@@ -29,6 +33,6 @@ Color rgba(int r, int g, int b, [double opacity = 1.0]) {
 /// hex('f5f5f5') // or
 /// hex('#f5f5f5')
 /// ```
-Color hex(String xxxxxx) {
+Color hex(final String xxxxxx) {
   return HexColor(xxxxxx);
 }

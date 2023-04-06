@@ -3,11 +3,13 @@
 import 'package:division/division.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(Main());
+void main() => runApp(const Main());
 
 class Main extends StatelessWidget {
+  const Main({super.key});
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         body: SafeArea(child: UserPage()),
@@ -17,19 +19,21 @@ class Main extends StatelessWidget {
 }
 
 class UserPage extends StatelessWidget {
-  final contentStyle = (BuildContext context) => ParentStyle()
+  UserPage({super.key});
+
+  ParentStyle contentStyle(final BuildContext context) => ParentStyle()
     ..overflow.scrollable()
     ..padding(vertical: 30, horizontal: 20)
     ..minHeight(MediaQuery.of(context).size.height - (2 * 30));
 
-  final titleStyle = TxtStyle()
+  final TxtStyle titleStyle = TxtStyle()
     ..bold()
     ..fontSize(32)
     ..margin(bottom: 20)
     ..alignmentContent.centerLeft();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Parent(
       style: contentStyle(context),
       child: Column(
@@ -37,7 +41,7 @@ class UserPage extends StatelessWidget {
           Txt('User settings', style: titleStyle),
           UserCard(),
           ActionsRow(),
-          Settings(),
+          const Settings(),
         ],
       ),
     );
@@ -45,15 +49,17 @@ class UserPage extends StatelessWidget {
 }
 
 class UserCard extends StatelessWidget {
+  UserCard({super.key});
+
   Widget _buildUserRow() {
     return Row(
       children: <Widget>[
-        Parent(style: userImageStyle, child: Icon(Icons.account_circle)),
+        Parent(style: userImageStyle, child: const Icon(Icons.account_circle)),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Txt('Rein Gundersen Bentdal', style: nameTextStyle),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             Txt('Creative builder', style: nameDescriptionTextStyle)
           ],
         )
@@ -76,21 +82,21 @@ class UserCard extends StatelessWidget {
     );
   }
 
-  Widget _buildUserStatsItem(String value, String text) {
+  Widget _buildUserStatsItem(final String value, final String text) {
     final TxtStyle textStyle = TxtStyle()
       ..fontSize(20)
       ..textColor(Colors.white);
     return Column(
       children: <Widget>[
         Txt(value, style: textStyle),
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
         Txt(text, style: nameDescriptionTextStyle),
       ],
     );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Parent(
       style: userCardStyle,
       child: Column(
@@ -130,14 +136,16 @@ class UserCard extends StatelessWidget {
 }
 
 class ActionsRow extends StatelessWidget {
-  Widget _buildActionsItem(String title, IconData icon) {
+  ActionsRow({super.key});
+
+  Widget _buildActionsItem(final String title, final IconData icon) {
     return Parent(
       style: actionsItemStyle,
       child: Column(
         children: <Widget>[
           Parent(
             style: actionsItemIconStyle,
-            child: Icon(icon, size: 20, color: Color(0xFF42526F)),
+            child: Icon(icon, size: 20, color: const Color(0xFF42526F)),
           ),
           Txt(title, style: actionsItemTextStyle)
         ],
@@ -146,7 +154,7 @@ class ActionsRow extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
@@ -175,27 +183,55 @@ class ActionsRow extends StatelessWidget {
 }
 
 class Settings extends StatelessWidget {
+  const Settings({super.key});
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Column(
       children: <Widget>[
-        SettingsItem(Icons.location_on, hex('#8D7AEE'), 'Address',
-            'Ensure your harvesting address'),
         SettingsItem(
-            Icons.lock, hex('#F468B7'), 'Privacy', 'System permission change'),
+          Icons.location_on,
+          hex('#8D7AEE'),
+          'Address',
+          'Ensure your harvesting address',
+        ),
         SettingsItem(
-            Icons.menu, hex('#FEC85C'), 'General', 'Basic functional settings'),
-        SettingsItem(Icons.notifications, hex('#5FD0D3'), 'Notifications',
-            'Take over the news in time'),
-        SettingsItem(Icons.question_answer, hex('#BFACAA'), 'Support',
-            'We are here to help'),
+          Icons.lock,
+          hex('#F468B7'),
+          'Privacy',
+          'System permission change',
+        ),
+        SettingsItem(
+          Icons.menu,
+          hex('#FEC85C'),
+          'General',
+          'Basic functional settings',
+        ),
+        SettingsItem(
+          Icons.notifications,
+          hex('#5FD0D3'),
+          'Notifications',
+          'Take over the news in time',
+        ),
+        SettingsItem(
+          Icons.question_answer,
+          hex('#BFACAA'),
+          'Support',
+          'We are here to help',
+        ),
       ],
     );
   }
 }
 
 class SettingsItem extends StatefulWidget {
-  SettingsItem(this.icon, this.iconBgColor, this.title, this.description);
+  const SettingsItem(
+    this.icon,
+    this.iconBgColor,
+    this.title,
+    this.description, {
+    super.key,
+  });
 
   final IconData icon;
   final Color iconBgColor;
@@ -203,31 +239,31 @@ class SettingsItem extends StatefulWidget {
   final String description;
 
   @override
-  _SettingsItemState createState() => _SettingsItemState();
+  State<SettingsItem> createState() => _SettingsItemState();
 }
 
 class _SettingsItemState extends State<SettingsItem> {
   bool pressed = false;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Parent(
       style: settingsItemStyle(pressed),
       gesture: Gestures()
-        ..isTap((isTapped) => setState(() => pressed = isTapped)),
+        ..isTap((final bool isTapped) => setState(() => pressed = isTapped)),
       child: Row(
         children: <Widget>[
           Parent(
             style: settingsItemIconStyle(widget.iconBgColor),
             child: Icon(widget.icon, color: Colors.white, size: 20),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Txt(widget.title, style: itemTitleTextStyle),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               Txt(widget.description, style: itemDescriptionTextStyle),
             ],
           )
@@ -236,7 +272,7 @@ class _SettingsItemState extends State<SettingsItem> {
     );
   }
 
-  final settingsItemStyle = (pressed) => ParentStyle()
+  ParentStyle settingsItemStyle(final bool pressed) => ParentStyle()
     ..elevation(pressed ? 0 : 50, color: Colors.grey)
     ..scale(pressed ? 0.95 : 1.0)
     ..alignmentContent.center()
@@ -247,7 +283,7 @@ class _SettingsItemState extends State<SettingsItem> {
     ..ripple(true)
     ..animate(150, Curves.easeOut);
 
-  final settingsItemIconStyle = (Color color) => ParentStyle()
+  ParentStyle settingsItemIconStyle(final Color color) => ParentStyle()
     ..background.color(color)
     ..margin(left: 15)
     ..padding(all: 12)

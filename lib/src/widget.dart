@@ -1,25 +1,26 @@
+import 'package:division/src/animated.dart';
+import 'package:division/src/build.dart';
+import 'package:division/src/model.dart';
+import 'package:division/src/style.dart';
 import 'package:flutter/material.dart';
 
-import 'animated.dart';
-import 'build.dart';
-import 'model.dart';
-import 'style.dart';
-
 class Parent extends StatelessWidget {
-  const Parent({this.child, required this.style, this.gesture});
+  const Parent({required this.style, super.key, this.child, this.gesture});
 
   final Widget? child;
   final ParentStyle style;
   final Gestures? gesture;
 
   @override
-  Widget build(BuildContext context) {
-    StyleModel? styleModel = style.exportStyle;
-    GestureModel? gestureModel = gesture?.exportGesture;
+  Widget build(final BuildContext context) {
+    final StyleModel styleModel = style.exportStyle;
+    final GestureModel? gestureModel = gesture?.exportGesture;
 
     Widget? widgetTree;
 
-    if (child != null) widgetTree = ParentBuild(child: child!);
+    if (child != null) {
+      widgetTree = ParentBuild(child: child!);
+    }
 
     if (styleModel.duration != null) {
       //animated
@@ -42,18 +43,18 @@ class Parent extends StatelessWidget {
 }
 
 class Txt extends StatelessWidget {
-  const Txt(this.text, {this.style, this.gesture});
+  const Txt(this.text, {super.key, this.style, this.gesture});
 
   final String text;
   final TxtStyle? style;
   final Gestures? gesture;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     Widget widgetTree;
-    StyleModel? styleModel = style?.exportStyle;
-    TextModel? textModel = style?.exportTextStyle;
-    GestureModel? gestureModel = gesture?.exportGesture;
+    final StyleModel? styleModel = style?.exportStyle;
+    final TextModel? textModel = style?.exportTextStyle;
+    final GestureModel? gestureModel = gesture?.exportGesture;
 
     if (styleModel?.curve != null && styleModel?.duration != null) {
       widgetTree = TxtAnimated(
@@ -62,10 +63,10 @@ class Txt extends StatelessWidget {
         curve: styleModel!.curve!,
         duration: styleModel.duration!,
       );
-    } else if (textModel?.editable != null && textModel?.editable == true) {
+    } else if (textModel?.editable ?? false) {
       widgetTree = TxtBuildEditable(
         text: text,
-        textModel: textModel!,
+        textModel: textModel,
       );
     } else {
       widgetTree = TxtBuild(
@@ -76,15 +77,15 @@ class Txt extends StatelessWidget {
 
     if (styleModel?.duration != null) {
       return CoreAnimated(
-        child: widgetTree,
         gestureModel: gestureModel,
         styleModel: styleModel,
+        child: widgetTree,
       );
     } else {
       return CoreBuild(
-        child: widgetTree,
         gestureModel: gestureModel,
         styleModel: styleModel,
+        child: widgetTree,
       );
     }
   }

@@ -1,12 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:division/division.dart';
+import 'package:flutter/material.dart';
 
-void main() => runApp(Main());
+void main() => runApp(const Main());
 
 class Main extends StatelessWidget {
+  const Main({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(final BuildContext context) {
+    return const MaterialApp(
       home: Scaffold(
         body: Test(),
       ),
@@ -15,29 +17,32 @@ class Main extends StatelessWidget {
 }
 
 class Test extends StatefulWidget {
+  const Test({super.key});
+
   @override
-  _TestState createState() => _TestState();
+  State<Test> createState() => _TestState();
 }
 
 class _TestState extends State<Test> {
   bool _isUsernameFieldActive = false;
   bool _isPasswordFieldActive = false;
 
-  final inputFieldStyle = (bool isActive, TxtStyle activeStyle) => TxtStyle()
-    ..textColor(Colors.black)
-    ..textAlign.left()
-    ..fontSize(16)
-    ..padding(horizontal: 15, vertical: 15)
-    ..margin(horizontal: 50, vertical: 10)
-    ..borderRadius(all: 10)
-    ..alignment.center()
-    ..background.color(Colors.grey[200]!)
-    ..animate(300, Curves.easeOut)
-    ..add(isActive ? activeStyle : null, override: true);
+  TxtStyle inputFieldStyle(final bool isActive, final TxtStyle activeStyle) =>
+      TxtStyle()
+        ..textColor(Colors.black)
+        ..textAlign.left()
+        ..fontSize(16)
+        ..padding(horizontal: 15, vertical: 15)
+        ..margin(horizontal: 50, vertical: 10)
+        ..borderRadius(all: 10)
+        ..alignment.center()
+        ..background.color(Colors.grey[200]!)
+        ..animate(300, Curves.easeOut)
+        ..add(isActive ? activeStyle : null, override: true);
 
   final TxtStyle inputFieldActiveStyle = TxtStyle()
     ..background.color(Colors.blue)
-    ..bold(true)
+    ..bold()
     ..textColor(Colors.white);
 
   final TxtStyle submitButtonStyle = TxtStyle()
@@ -53,14 +58,14 @@ class _TestState extends State<Test> {
     ..padding(vertical: 15)
     ..elevation(10, opacity: 0.5);
 
-  final titleStyle = TxtStyle()
+  final TxtStyle titleStyle = TxtStyle()
     ..fontSize(24)
     ..bold()
     ..margin(bottom: 30, horizontal: 50)
     ..alignment.centerLeft();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -71,10 +76,13 @@ class _TestState extends State<Test> {
             ..editable(
               autoFocus: true,
               placeholder: 'enter username',
-              onFocusChange: (hasFocus) {
-                if (hasFocus != _isUsernameFieldActive)
-                  setState(() => _isUsernameFieldActive =
-                      hasFocus ?? _isUsernameFieldActive);
+              onFocusChange: (final bool? hasFocus) {
+                if (hasFocus != _isUsernameFieldActive) {
+                  setState(
+                    () => _isUsernameFieldActive =
+                        hasFocus ?? _isUsernameFieldActive,
+                  );
+                }
               },
             ),
         ),
@@ -84,10 +92,13 @@ class _TestState extends State<Test> {
             ..editable(
               placeholder: 'enter password',
               obscureText: true,
-              onFocusChange: (hasFocus) {
-                if (hasFocus != _isPasswordFieldActive)
-                  setState(() => _isPasswordFieldActive =
-                      hasFocus ?? _isPasswordFieldActive);
+              onFocusChange: (final bool? hasFocus) {
+                if (hasFocus != _isPasswordFieldActive) {
+                  setState(
+                    () => _isPasswordFieldActive =
+                        hasFocus ?? _isPasswordFieldActive,
+                  );
+                }
               },
             ),
         ),

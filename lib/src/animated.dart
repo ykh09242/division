@@ -1,10 +1,10 @@
+import 'package:division/src/build.dart';
+import 'package:division/src/model.dart';
 import 'package:flutter/material.dart';
-
-import 'model.dart';
-import 'build.dart';
 
 class CoreAnimated extends ImplicitlyAnimatedWidget {
   CoreAnimated({
+    super.key,
     this.styleModel,
     this.gestureModel,
     this.child,
@@ -17,7 +17,8 @@ class CoreAnimated extends ImplicitlyAnimatedWidget {
   final GestureModel? gestureModel;
 
   @override
-  _CoreAnimatedState createState() => _CoreAnimatedState();
+  ImplicitlyAnimatedWidgetState<CoreAnimated> createState() =>
+      _CoreAnimatedState();
 }
 
 class _CoreAnimatedState extends AnimatedWidgetBaseState<CoreAnimated> {
@@ -32,40 +33,65 @@ class _CoreAnimatedState extends AnimatedWidgetBaseState<CoreAnimated> {
   Tween<double?>? _opacity;
 
   @override
-  void forEachTween(TweenVisitor<dynamic> visitor) {
-    _alignment = visitor(_alignment, widget.styleModel?.alignment,
-            (dynamic value) => AlignmentGeometryTween(begin: value))
-        as AlignmentGeometryTween?;
+  void forEachTween(final TweenVisitor<dynamic> visitor) {
+    _alignment = visitor(
+      _alignment,
+      widget.styleModel?.alignment,
+      (final dynamic value) =>
+          AlignmentGeometryTween(begin: value as AlignmentGeometry?),
+    ) as AlignmentGeometryTween?;
     _alignmentContent = visitor(
-            _alignmentContent,
-            widget.styleModel?.alignmentContent,
-            (dynamic value) => AlignmentGeometryTween(begin: value))
-        as AlignmentGeometryTween?;
-    _padding = visitor(_padding, widget.styleModel?.padding,
-            (dynamic value) => EdgeInsetsGeometryTween(begin: value))
-        as EdgeInsetsGeometryTween?;
-    _decoration = visitor(_decoration, widget.styleModel?.decoration,
-        (dynamic value) => DecorationTween(begin: value)) as DecorationTween?;
-    _constraints = visitor(_constraints, widget.styleModel?.constraints,
-            (dynamic value) => BoxConstraintsTween(begin: value))
-        as BoxConstraintsTween?;
-    _margin = visitor(_margin, widget.styleModel?.margin,
-            (dynamic value) => EdgeInsetsGeometryTween(begin: value))
-        as EdgeInsetsGeometryTween?;
-    _transform = visitor(_transform, widget.styleModel?.transform,
-        (dynamic value) => Matrix4Tween(begin: value)) as Matrix4Tween?;
-    _blur = visitor(_blur, widget.styleModel?.backgroundBlur,
-        (dynamic value) => Tween<double>(begin: value)) as Tween<double?>?;
-    _opacity = visitor(_opacity, widget.styleModel?.opacity,
-        (dynamic value) => Tween<double>(begin: value)) as Tween<double?>?;
+      _alignmentContent,
+      widget.styleModel?.alignmentContent,
+      (final dynamic value) =>
+          AlignmentGeometryTween(begin: value as AlignmentGeometry?),
+    ) as AlignmentGeometryTween?;
+    _padding = visitor(
+      _padding,
+      widget.styleModel?.padding,
+      (final dynamic value) =>
+          EdgeInsetsGeometryTween(begin: value as EdgeInsetsGeometry?),
+    ) as EdgeInsetsGeometryTween?;
+    _decoration = visitor(
+      _decoration,
+      widget.styleModel?.decoration,
+      (final dynamic value) => DecorationTween(begin: value as Decoration?),
+    ) as DecorationTween?;
+    _constraints = visitor(
+      _constraints,
+      widget.styleModel?.constraints,
+      (final dynamic value) =>
+          BoxConstraintsTween(begin: value as BoxConstraints?),
+    ) as BoxConstraintsTween?;
+    _margin = visitor(
+      _margin,
+      widget.styleModel?.margin,
+      (final dynamic value) =>
+          EdgeInsetsGeometryTween(begin: value as EdgeInsetsGeometry?),
+    ) as EdgeInsetsGeometryTween?;
+    _transform = visitor(
+      _transform,
+      widget.styleModel?.transform,
+      (final dynamic value) => Matrix4Tween(begin: value as Matrix4?),
+    ) as Matrix4Tween?;
+    _blur = visitor(
+      _blur,
+      widget.styleModel?.backgroundBlur,
+      (final dynamic value) => Tween<double>(begin: value as double?),
+    ) as Tween<double?>?;
+    _opacity = visitor(
+      _opacity,
+      widget.styleModel?.opacity,
+      (final dynamic value) => Tween<double>(begin: value as double?),
+    ) as Tween<double?>?;
   }
 
   @override
-  Widget build(BuildContext context) {
-    StyleModel? _styleModel = widget.styleModel;
+  Widget build(final BuildContext context) {
+    final StyleModel? styleModel = widget.styleModel;
 
-    if (_styleModel != null) {
-      _styleModel
+    if (styleModel != null) {
+      styleModel
         ..alignment = _alignment?.evaluate(animation)
         ..alignmentContent = _alignmentContent?.evaluate(animation)
         ..padding = _padding?.evaluate(animation)
@@ -78,7 +104,7 @@ class _CoreAnimatedState extends AnimatedWidgetBaseState<CoreAnimated> {
     }
 
     return CoreBuild(
-      styleModel: _styleModel,
+      styleModel: styleModel,
       gestureModel: widget.gestureModel,
       child: widget.child,
     );
@@ -86,19 +112,21 @@ class _CoreAnimatedState extends AnimatedWidgetBaseState<CoreAnimated> {
 }
 
 class TxtAnimated extends ImplicitlyAnimatedWidget {
-  TxtAnimated({
-    this.textModel,
-    required Curve curve,
-    required Duration duration,
+  const TxtAnimated({
+    required super.curve,
+    required super.duration,
     required this.text,
-  }) : super(curve: curve, duration: duration);
+    super.key,
+    this.textModel,
+  });
 
   final String text;
 
   final TextModel? textModel;
 
   @override
-  _TxtAnimatedState createState() => _TxtAnimatedState();
+  ImplicitlyAnimatedWidgetState<TxtAnimated> createState() =>
+      _TxtAnimatedState();
 }
 
 class _TxtAnimatedState extends AnimatedWidgetBaseState<TxtAnimated> {
@@ -109,25 +137,40 @@ class _TxtAnimatedState extends AnimatedWidgetBaseState<TxtAnimated> {
   Tween<double>? _wordSpacing;
 
   @override
-  void forEachTween(TweenVisitor<dynamic> visitor) {
-    _fontSize = visitor(_fontSize, widget.textModel?.fontSize,
-        (dynamic value) => Tween<double>(begin: value)) as Tween<double>?;
-    _textColor = visitor(_textColor, widget.textModel?.textColor,
-        (dynamic value) => ColorTween(begin: value)) as ColorTween?;
-    _maxLines = visitor(_maxLines, widget.textModel?.maxLines,
-        (dynamic value) => Tween<int>(begin: value)) as Tween<int>?;
-    _letterSpacing = visitor(_letterSpacing, widget.textModel?.letterSpacing,
-        (dynamic value) => Tween<double>(begin: value)) as Tween<double>?;
-    _wordSpacing = visitor(_wordSpacing, widget.textModel?.wordSpacing,
-        (dynamic value) => Tween<double>(begin: value)) as Tween<double>?;
+  void forEachTween(final TweenVisitor<dynamic> visitor) {
+    _fontSize = visitor(
+      _fontSize,
+      widget.textModel?.fontSize,
+      (final dynamic value) => Tween<double>(begin: value as double),
+    ) as Tween<double>?;
+    _textColor = visitor(
+      _textColor,
+      widget.textModel?.textColor,
+      (final dynamic value) => ColorTween(begin: value as Color),
+    ) as ColorTween?;
+    _maxLines = visitor(
+      _maxLines,
+      widget.textModel?.maxLines,
+      (final dynamic value) => Tween<int>(begin: value as int),
+    ) as Tween<int>?;
+    _letterSpacing = visitor(
+      _letterSpacing,
+      widget.textModel?.letterSpacing,
+      (final dynamic value) => Tween<double>(begin: value as double),
+    ) as Tween<double>?;
+    _wordSpacing = visitor(
+      _wordSpacing,
+      widget.textModel?.wordSpacing,
+      (final dynamic value) => Tween<double>(begin: value as double),
+    ) as Tween<double>?;
   }
 
   @override
-  Widget build(BuildContext context) {
-    TextModel? _textModel = widget.textModel;
+  Widget build(final BuildContext context) {
+    final TextModel? textModel = widget.textModel;
 
-    if (_textModel != null) {
-      _textModel
+    if (textModel != null) {
+      textModel
         ..fontSize = _fontSize?.evaluate(animation)
         ..textColor = _textColor?.evaluate(animation)
         ..maxLines = _maxLines?.evaluate(animation)
@@ -135,15 +178,15 @@ class _TxtAnimatedState extends AnimatedWidgetBaseState<TxtAnimated> {
         ..wordSpacing = _wordSpacing?.evaluate(animation);
     }
 
-    if (_textModel?.editable != null && _textModel?.editable == true) {
+    if (textModel?.editable ?? false) {
       return TxtBuildEditable(
         text: widget.text,
-        textModel: _textModel!,
+        textModel: textModel,
       );
     } else {
       return TxtBuild(
         text: widget.text,
-        textModel: _textModel,
+        textModel: textModel,
       );
     }
   }

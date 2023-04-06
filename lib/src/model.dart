@@ -1,17 +1,17 @@
+import 'package:division/src/function/hex_color.dart';
+// import 'package:division/src/style.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import 'function/hex_color.dart';
-// import 'style.dart';
-
 class RippleModel {
+  RippleModel({this.enable, this.highlightColor, this.splashColor});
+
   final bool? enable;
   final Color? highlightColor;
   final Color? splashColor;
-
-  RippleModel({this.enable, this.highlightColor, this.splashColor});
 }
 
+// ignore: prefer_mixin
 class BackgroundModel with ChangeNotifier {
   Color? _color;
   double? _blur;
@@ -27,13 +27,18 @@ class BackgroundModel with ChangeNotifier {
   BlendMode? get exportBackgroundBlendMode => _blendMode;
 
   /// BackgroundColor
-  void color(Color color) {
+  void color(final Color color) {
     _color = color;
     notifyListeners();
   }
 
   /// background color in the rgba format
-  void rgba(int r, int g, int b, [double opacity = 1.0]) {
+  void rgba(
+    final int r,
+    final int g,
+    final int b, [
+    final double opacity = 1.0,
+  ]) {
     _color = Color.fromRGBO(r, g, b, opacity);
     notifyListeners();
   }
@@ -42,7 +47,7 @@ class BackgroundModel with ChangeNotifier {
   /// ```dart
   /// background.hex('f5f5f5')
   /// ```
-  void hex(String xxxxxx) {
+  void hex(final String xxxxxx) {
     _color = HexColor(xxxxxx);
     notifyListeners();
   }
@@ -55,7 +60,7 @@ class BackgroundModel with ChangeNotifier {
   /// ..background.rgba(255,255,255,0.15)
   /// ```
   /// Does not work together with `rotate()`.
-  void blur(double blur) {
+  void blur(final double blur) {
     _blur = blur;
     notifyListeners();
   }
@@ -70,24 +75,29 @@ class BackgroundModel with ChangeNotifier {
   ///   fit: BoxFit.cover
   /// )
   /// ```
-  void image(
-      {String? url,
-      String? path,Provider
-      ImageProvider<dynamic>? imageProvider,
-      ColorFilter? colorFilter,
-      BoxFit? fit,
-      AlignmentGeometry alignment = Alignment.center,
-      ImageRepeat repeat = ImageRepeat.noRepeat}) {
-    if ((url ?? path ?? imageProvider) == null)
-      throw ('Either the [imageProvider], [url] or the [path] has to be provided');
+  void image({
+    final String? url,
+    final String? path,
+    final ImageProvider<dynamic>? imageProvider,
+    final ColorFilter? colorFilter,
+    final BoxFit? fit,
+    final AlignmentGeometry alignment = Alignment.center,
+    final ImageRepeat repeat = ImageRepeat.noRepeat,
+  }) {
+    if ((url ?? path ?? imageProvider) == null) {
+      throw Exception(
+        'Either the [imageProvider], [url] or the [path] has to be provided',
+      );
+    }
 
     ImageProvider<dynamic> image;
-    if (imageProvider != null)
+    if (imageProvider != null) {
       image = imageProvider;
-    else if (path != null)
+    } else if (path != null) {
       image = AssetImage(path);
-    else
+    } else {
       image = NetworkImage(url!);
+    }
 
     _image = DecorationImage(
       image: image as ImageProvider<Object>,
@@ -99,45 +109,46 @@ class BackgroundModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void blendMode(BlendMode blendMode) => _blendMode = blendMode;
+  void blendMode(final BlendMode blendMode) => _blendMode = blendMode;
 }
 
+// ignore: prefer_mixin
 class AlignmentModel with ChangeNotifier {
   late AlignmentGeometry _alignment;
 
   AlignmentGeometry get getAlignment => _alignment;
 
-  void topLeft([bool enable = true]) =>
+  void topLeft([final bool enable = true]) =>
       _updateAlignment(Alignment.topLeft, enable);
 
-  void topCenter([bool enable = true]) =>
+  void topCenter([final bool enable = true]) =>
       _updateAlignment(Alignment.topCenter, enable);
 
-  void topRight([bool enable = true]) =>
+  void topRight([final bool enable = true]) =>
       _updateAlignment(Alignment.topRight, enable);
 
-  void bottomLeft([bool enable = true]) =>
+  void bottomLeft([final bool enable = true]) =>
       _updateAlignment(Alignment.bottomLeft, enable);
 
-  void bottomCenter([bool enable = true]) =>
+  void bottomCenter([final bool enable = true]) =>
       _updateAlignment(Alignment.bottomCenter, enable);
 
-  void bottomRight([bool enable = true]) =>
+  void bottomRight([final bool enable = true]) =>
       _updateAlignment(Alignment.bottomRight, enable);
 
-  void centerLeft([bool enable = true]) =>
+  void centerLeft([final bool enable = true]) =>
       _updateAlignment(Alignment.centerLeft, enable);
 
-  void center([bool enable = true]) =>
+  void center([final bool enable = true]) =>
       _updateAlignment(Alignment.center, enable);
 
-  void centerRight([bool enable = true]) =>
+  void centerRight([final bool enable = true]) =>
       _updateAlignment(Alignment.centerRight, enable);
 
-  void coordinate(double x, double y, [bool enable = true]) =>
+  void coordinate(final double x, final double y, [final bool enable = true]) =>
       _updateAlignment(Alignment(x, y), enable);
 
-  void _updateAlignment(AlignmentGeometry alignment, bool enable) {
+  void _updateAlignment(final AlignmentGeometry alignment, final bool enable) {
     if (enable) {
       _alignment = alignment;
       notifyListeners();
@@ -147,6 +158,7 @@ class AlignmentModel with ChangeNotifier {
 
 enum OverflowType { hidden, scroll, visible }
 
+// ignore: prefer_mixin
 class OverflowModel with ChangeNotifier {
   Axis? _direction;
   OverflowType? _overflow;
@@ -157,19 +169,31 @@ class OverflowModel with ChangeNotifier {
 
   // TODO: parameters named or unnamed?
 
-  void hidden([bool enable = true]) =>
+  void hidden([final bool enable = true]) =>
       _updateOverflow(OverflowType.hidden, null, enable);
 
-  void scrollable([Axis direction = Axis.vertical, bool enable = true]) =>
+  void scrollable([
+    final Axis direction = Axis.vertical,
+    final bool enable = true,
+  ]) =>
       _updateOverflow(OverflowType.scroll, direction, enable);
 
-  void visible([Axis direction = Axis.vertical, bool enable = true]) =>
+  void visible([
+    final Axis direction = Axis.vertical,
+    final bool enable = true,
+  ]) =>
       _updateOverflow(OverflowType.visible, direction, enable);
 
-  void _updateOverflow(OverflowType overflow, Axis? direction, bool enable) {
-    if (enable == true) {
+  void _updateOverflow(
+    final OverflowType overflow,
+    final Axis? direction,
+    final bool enable,
+  ) {
+    if (enable) {
       _overflow = overflow;
-      if (direction != null) _direction = direction;
+      if (direction != null) {
+        _direction = direction;
+      }
       notifyListeners();
     }
   }
@@ -209,7 +233,7 @@ class StyleModel {
   BoxConstraints? _constraints;
   Matrix4? _transform;
 
-  void inject(StyleModel? intruder, bool override) {
+  void inject(final StyleModel? intruder, final bool override) {
     alignment = _replace(alignment, intruder?.alignment, override);
     alignmentContent =
         _replace(alignmentContent, intruder?.alignmentContent, override);
@@ -247,15 +271,22 @@ class StyleModel {
     // gesture = _replace(gesture, intruder?.gesture, override);
   }
 
-  dynamic _replace(dynamic current, dynamic intruder, bool override) {
-    if (override == true)
+  T _replace<T>(
+    final T current,
+    final T intruder,
+    final bool override,
+  ) {
+    if (override) {
       return intruder ?? current;
-    else
+    } else {
       return current ?? intruder;
+    }
   }
 
   BoxConstraints? get constraints {
-    if (_constraints != null) return _constraints;
+    if (_constraints != null) {
+      return _constraints;
+    }
 
     BoxConstraints? boxConstraints;
     if ((minHeight ?? maxHeight ?? minWidth ?? maxWidth) != null) {
@@ -275,7 +306,9 @@ class StyleModel {
   }
 
   BoxDecoration? get decoration {
-    if (_decoration != null) return _decoration;
+    if (_decoration != null) {
+      return _decoration;
+    }
 
     if ((backgroundColor ??
             backgroundImage ??
@@ -286,22 +319,25 @@ class StyleModel {
             boxShape ??
             backgroundBlendMode) !=
         null) {
-      BoxDecoration boxDecoration = BoxDecoration(
-          color: backgroundColor,
-          image: backgroundImage,
-          gradient: gradient,
-          border: border,
-          borderRadius: borderRadius,
-          shape: boxShape ?? BoxShape.rectangle,
-          backgroundBlendMode: backgroundBlendMode,
-          boxShadow: boxShadow);
+      final BoxDecoration boxDecoration = BoxDecoration(
+        color: backgroundColor,
+        image: backgroundImage,
+        gradient: gradient,
+        border: border,
+        borderRadius: borderRadius,
+        shape: boxShape ?? BoxShape.rectangle,
+        backgroundBlendMode: backgroundBlendMode,
+        boxShadow: boxShadow,
+      );
       return boxDecoration;
     }
     return null;
   }
 
   Matrix4? get transform {
-    if (_transform != null) return _transform;
+    if (_transform != null) {
+      return _transform;
+    }
 
     if ((scale ?? rotate ?? offset) != null) {
       return Matrix4.rotationZ(rotate ?? 0.0)
@@ -314,20 +350,20 @@ class StyleModel {
     return null;
   }
 
-  set setBoxDecoration(BoxDecoration? boxDecoration) =>
+  set setBoxDecoration(final BoxDecoration? boxDecoration) =>
       _decoration = boxDecoration;
 
-  set setBoxConstraints(BoxConstraints? boxConstraints) =>
+  set setBoxConstraints(final BoxConstraints? boxConstraints) =>
       _constraints = boxConstraints;
 
-  set setTransform(Matrix4? transform) => _transform = transform;
+  set setTransform(final Matrix4? transform) => _transform = transform;
 }
 
 class GestureModel {
   GestureModel({
-    this.behavior,
     required this.excludeFromSemantics,
     required this.dragStartBehavior,
+    this.behavior,
   });
 
   void Function(bool isTapped)? isTap;
@@ -412,7 +448,7 @@ class GestureModel {
 // }
 
 // dynamic _replace(dynamic current, dynamic intruder, bool override) {
-//   if (override == true)
+//   if (override )
 //     return intruder ?? current;
 //   else
 //     return current ?? intruder;
@@ -448,7 +484,7 @@ class TextModel {
   void Function()? onEditingComplete;
   FocusNode? focusNode;
 
-  void inject(TextModel? textModel, bool override) {
+  void inject(final TextModel? textModel, final bool override) {
     fontWeight = _replace(fontWeight, textModel?.fontWeight, override);
     textAlign = _replace(textAlign, textModel?.textAlign, override);
     fontStyle = _replace(fontStyle, textModel?.fontStyle, override);
@@ -478,11 +514,16 @@ class TextModel {
     textOverflow = _replace(textOverflow, textModel?.textOverflow, override);
   }
 
-  dynamic _replace(dynamic current, dynamic intruder, bool override) {
-    if (override == true)
+  T _replace<T>(
+    final T current,
+    final T intruder,
+    final bool override,
+  ) {
+    if (override) {
       return intruder ?? current;
-    else
+    } else {
       return current ?? intruder;
+    }
   }
 
   TextStyle get textStyle {
@@ -501,27 +542,32 @@ class TextModel {
   }
 }
 
+// ignore: prefer_mixin
 class TextAlignModel with ChangeNotifier {
   TextAlign? _textAlign;
 
   TextAlign? get exportTextAlign => _textAlign;
 
-  void left([bool enable = true]) => _updateAlignment(TextAlign.left, enable);
+  void left([final bool enable = true]) =>
+      _updateAlignment(TextAlign.left, enable);
 
-  void right([bool enable = true]) => _updateAlignment(TextAlign.right, enable);
+  void right([final bool enable = true]) =>
+      _updateAlignment(TextAlign.right, enable);
 
-  void center([bool enable = true]) =>
+  void center([final bool enable = true]) =>
       _updateAlignment(TextAlign.center, enable);
 
-  void justify([bool enable = true]) =>
+  void justify([final bool enable = true]) =>
       _updateAlignment(TextAlign.justify, enable);
 
-  void start([bool enable = true]) => _updateAlignment(TextAlign.start, enable);
+  void start([final bool enable = true]) =>
+      _updateAlignment(TextAlign.start, enable);
 
-  void end([bool enable = true]) => _updateAlignment(TextAlign.end, enable);
+  void end([final bool enable = true]) =>
+      _updateAlignment(TextAlign.end, enable);
 
-  _updateAlignment(TextAlign textAlign, bool enable) {
-    if (enable == true) {
+  void _updateAlignment(final TextAlign textAlign, final bool enable) {
+    if (enable) {
       _textAlign = textAlign;
       notifyListeners();
     }

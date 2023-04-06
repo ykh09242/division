@@ -1,9 +1,9 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'model.dart';
-import 'function/angleToRadians.dart';
+import 'package:division/src/function/angle_to_radians.dart';
+import 'package:division/src/model.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 
 enum AngleFormat { degree, radians, cycles }
 
@@ -13,22 +13,23 @@ abstract class CoreStyle {
   }
 
   @mustCallSuper
-  _addListeners() {
-    alignment
-      ..addListener(() => _styleModel.alignment = alignment.getAlignment);
-    alignmentContent
-      ..addListener(
-          () => _styleModel.alignmentContent = alignmentContent.getAlignment);
-    background
-      ..addListener(() => _styleModel
+  void _addListeners() {
+    alignment.addListener(() => _styleModel.alignment = alignment.getAlignment);
+    alignmentContent.addListener(
+      () => _styleModel.alignmentContent = alignmentContent.getAlignment,
+    );
+    background.addListener(
+      () => _styleModel
         ..backgroundColor = background.exportBackgroundColor
         ..backgroundBlur = background.exportBackgroundBlur
         ..backgroundImage = background.exportBackgroundImage
-        ..backgroundBlendMode = background.exportBackgroundBlendMode);
-    overflow
-      ..addListener(() => _styleModel
+        ..backgroundBlendMode = background.exportBackgroundBlendMode,
+    );
+    overflow.addListener(
+      () => _styleModel
         ..overflow = overflow.getOverflow
-        ..overflowDirection = overflow.getDirection);
+        ..overflowDirection = overflow.getDirection,
+    );
   }
 
   final AngleFormat angleFormat;
@@ -58,19 +59,21 @@ abstract class CoreStyle {
   /// ```dart
   /// ..padding(all: 10, bottom: 20) // gives a different padding at the bottom
   /// ```
-  void padding(
-      {double? all,
-      double? horizontal,
-      double? vertical,
-      double? top,
-      double? bottom,
-      double? left,
-      double? right}) {
+  void padding({
+    final double? all,
+    final double? horizontal,
+    final double? vertical,
+    final double? top,
+    final double? bottom,
+    final double? left,
+    final double? right,
+  }) {
     _styleModel.padding = EdgeInsets.only(
-        top: top ?? vertical ?? all ?? 0.0,
-        bottom: bottom ?? vertical ?? all ?? 0.0,
-        left: left ?? horizontal ?? all ?? 0.0,
-        right: right ?? horizontal ?? all ?? 0.0);
+      top: top ?? vertical ?? all ?? 0.0,
+      bottom: bottom ?? vertical ?? all ?? 0.0,
+      left: left ?? horizontal ?? all ?? 0.0,
+      right: right ?? horizontal ?? all ?? 0.0,
+    );
   }
 
   /// Empty space to surround the [decoration] and [child].
@@ -79,47 +82,52 @@ abstract class CoreStyle {
   /// ```dart
   /// ..margin(all: 10, bottom: 20) // gives a different margin at the bottom
   /// ```
-  void margin(
-      {double? all,
-      double? horizontal,
-      double? vertical,
-      double? top,
-      double? bottom,
-      double? left,
-      double? right}) {
+  void margin({
+    final double? all,
+    final double? horizontal,
+    final double? vertical,
+    final double? top,
+    final double? bottom,
+    final double? left,
+    final double? right,
+  }) {
     _styleModel.margin = EdgeInsets.only(
-        top: top ?? vertical ?? all ?? 0.0,
-        bottom: bottom ?? vertical ?? all ?? 0.0,
-        left: left ?? horizontal ?? all ?? 0.0,
-        right: right ?? horizontal ?? all ?? 0.0);
+      top: top ?? vertical ?? all ?? 0.0,
+      bottom: bottom ?? vertical ?? all ?? 0.0,
+      left: left ?? horizontal ?? all ?? 0.0,
+      right: right ?? horizontal ?? all ?? 0.0,
+    );
   }
 
   /// Creates a linear gradient.
   ///
   /// The [colors] argument must not be null. If [stops] is non-null, it must have the same length as [colors].
-  void linearGradient(
-      {AlignmentGeometry begin = Alignment.centerLeft,
-      AlignmentGeometry end = Alignment.centerRight,
-      required List<Color> colors,
-      TileMode tileMode = TileMode.clamp,
-      List<double>? stops}) {
+  void linearGradient({
+    required final List<Color> colors,
+    final AlignmentGeometry begin = Alignment.centerLeft,
+    final AlignmentGeometry end = Alignment.centerRight,
+    final TileMode tileMode = TileMode.clamp,
+    final List<double>? stops,
+  }) {
     _styleModel.gradient = LinearGradient(
-        begin: begin,
-        end: end,
-        colors: colors,
-        tileMode: tileMode,
-        stops: stops);
+      begin: begin,
+      end: end,
+      colors: colors,
+      tileMode: tileMode,
+      stops: stops,
+    );
   }
 
   /// Creates a radial gradient.
   ///
   /// The [colors] argument must not be null. If [stops] is non-null, it must have the same length as [colors].
-  void radialGradient(
-      {AlignmentGeometry center = Alignment.center,
-      required double radius,
-      required List<Color> colors,
-      TileMode tileMode = TileMode.clamp,
-      List<double>? stops}) {
+  void radialGradient({
+    required final double radius,
+    required final List<Color> colors,
+    final AlignmentGeometry center = Alignment.center,
+    final TileMode tileMode = TileMode.clamp,
+    final List<double>? stops,
+  }) {
     _styleModel.gradient = RadialGradient(
       center: center,
       radius: radius,
@@ -135,13 +143,14 @@ abstract class CoreStyle {
   ///
   /// Choose to calculate angles with radians or not through [useRadians] parameter.
   /// [end] default to 1.0 if [useRadians] is false and 2 * pi if [useRadians] is true,
-  void sweepGradient(
-      {AlignmentGeometry center = Alignment.center,
-      double startAngle = 0.0,
-      required double endAngle,
-      required List<Color> colors,
-      TileMode tileMode = TileMode.clamp,
-      List<double>? stops}) {
+  void sweepGradient({
+    required final double endAngle,
+    required final List<Color> colors,
+    final AlignmentGeometry center = Alignment.center,
+    final double startAngle = 0.0,
+    final TileMode tileMode = TileMode.clamp,
+    final List<double>? stops,
+  }) {
     _styleModel.gradient = SweepGradient(
       center: center,
       startAngle: angleToRadians(startAngle, angleFormat),
@@ -157,14 +166,15 @@ abstract class CoreStyle {
   /// ..border(all: 3.0, color: hex('#55ffff'), style: BorderStyle.solid)
   /// ```
   /// Choose between `all`, `left`, `right`, `top` and `bottom`. `all` works together with the other properties.
-  void border(
-      {double? all,
-      double? left,
-      double? right,
-      double? top,
-      double? bottom,
-      Color color = const Color(0xFF000000),
-      BorderStyle style = BorderStyle.solid}) {
+  void border({
+    final double? all,
+    final double? left,
+    final double? right,
+    final double? top,
+    final double? bottom,
+    final Color color = const Color(0xFF000000),
+    final BorderStyle style = BorderStyle.solid,
+  }) {
     _styleModel.border = Border(
       left: (left ?? all) == null
           ? BorderSide.none
@@ -182,12 +192,13 @@ abstract class CoreStyle {
   }
 
   /// It is valid to use `all` together with single sided properties. Single sided properties will trump over the `all` property.
-  void borderRadius(
-      {double? all,
-      double? topLeft,
-      double? topRight,
-      double? bottomLeft,
-      double? bottomRight}) {
+  void borderRadius({
+    final double? all,
+    final double? topLeft,
+    final double? topRight,
+    final double? bottomLeft,
+    final double? bottomRight,
+  }) {
     _styleModel.borderRadius = BorderRadius.only(
       topLeft: Radius.circular(topLeft ?? all ?? 0.0),
       topRight: Radius.circular(topRight ?? all ?? 0.0),
@@ -196,17 +207,18 @@ abstract class CoreStyle {
     );
   }
 
-  void circle([enable = true]) =>
+  void circle([final bool enable = true]) =>
       enable ? _styleModel.boxShape = BoxShape.circle : null;
 
   // TODO: add posibility to append box shadow instead of replacing. bool append = true
   /// If defined while the elevation method is defined, the last one defined will be the one applied.
-  void boxShadow(
-          {Color color = const Color(0x33000000),
-          double blur = 0.0,
-          Offset offset = Offset.zero,
-          double spread = 0.0}) =>
-      _styleModel.boxShadow = [
+  void boxShadow({
+    final Color color = const Color(0x33000000),
+    final double blur = 0.0,
+    final Offset offset = Offset.zero,
+    final double spread = 0.0,
+  }) =>
+      _styleModel.boxShadow = <BoxShadow>[
         BoxShadow(
           color: color,
           blurRadius: blur,
@@ -220,46 +232,53 @@ abstract class CoreStyle {
   /// ```dart
   /// ..elevation(30.0, color: Colors.grey, angle: 0.0)
   /// ```
-  void elevation(double elevation,
-      {double angle = 0.0,
-      Color color = const Color(0x33000000),
-      double opacity = 1.0}) {
-    if (elevation == 0) return;
+  void elevation(
+    final double elevation, {
+    final double angle = 0.0,
+    final Color color = const Color(0x33000000),
+    final double opacity = 1.0,
+  }) {
+    if (elevation == 0) {
+      return;
+    }
 
-    angle = angleToRadians(angle, angleFormat);
-    final double offsetX = sin(angle) * elevation;
-    final double offsetY = cos(angle) * elevation;
+    final double newAngle = angleToRadians(angle, angleFormat);
+    final double offsetX = sin(newAngle) * elevation;
+    final double offsetY = cos(newAngle) * elevation;
 
     // custom curve defining the opacity
     double calculatedOpacity = (0.5 - (sqrt(elevation) / 19)) * opacity;
-    if (calculatedOpacity < 0.0) calculatedOpacity = 0.0;
+    if (calculatedOpacity < 0.0) {
+      calculatedOpacity = 0.0;
+    }
 
     final Color colorWithOpacity = color.withOpacity(calculatedOpacity);
 
-    _styleModel.boxShadow = [
+    _styleModel.boxShadow = <BoxShadow>[
       BoxShadow(
-          color: colorWithOpacity,
-          blurRadius: elevation,
-          spreadRadius: 0.0,
-          offset: Offset(offsetX, offsetY))
+        color: colorWithOpacity,
+        blurRadius: elevation,
+        offset: Offset(offsetX, offsetY),
+      )
     ];
   }
 
-  void width(double width) => _styleModel.width = width;
+  void width(final double width) => _styleModel.width = width;
 
-  void minWidth(double minWidth) => _styleModel.minWidth = minWidth;
+  void minWidth(final double minWidth) => _styleModel.minWidth = minWidth;
 
-  void maxWidth(double maxWidth) => _styleModel.maxWidth = maxWidth;
+  void maxWidth(final double maxWidth) => _styleModel.maxWidth = maxWidth;
 
-  void height(double height) => _styleModel.height = height;
+  void height(final double height) => _styleModel.height = height;
 
-  void minHeight(double minHeight) => _styleModel.minHeight = minHeight;
+  void minHeight(final double minHeight) => _styleModel.minHeight = minHeight;
 
-  void maxHeight(double maxHeight) => _styleModel.maxHeight = maxHeight;
+  void maxHeight(final double maxHeight) => _styleModel.maxHeight = maxHeight;
 
-  void scale(double ratio) => _styleModel.scale = ratio;
+  void scale(final double ratio) => _styleModel.scale = ratio;
 
-  void offset(double dx, double dy) => _styleModel.offset = Offset(dx, dy);
+  void offset(final double dx, final double dy) =>
+      _styleModel.offset = Offset(dx, dy);
 
   ///
   /// ```dart
@@ -269,13 +288,17 @@ abstract class CoreStyle {
   /// StyleClass(angleFormat: AngleFormat.radians)
   ///   ..rotate(0.75 * pi * 2)
   /// ```
-  void rotate(double angle) =>
+  void rotate(final double angle) =>
       _styleModel.rotate = angleToRadians(angle, angleFormat);
 
-  void opacity(double opacity) => _styleModel.opacity = opacity;
+  void opacity(final double opacity) => _styleModel.opacity = opacity;
 
   /// Material ripple effect
-  void ripple(bool enable, {Color? splashColor, Color? highlightColor}) {
+  void ripple(
+    final bool enable, {
+    final Color? splashColor,
+    final Color? highlightColor,
+  }) {
     _styleModel.ripple = RippleModel(
       enable: enable,
       splashColor: splashColor,
@@ -299,9 +322,10 @@ abstract class CoreStyle {
   ///   Future.delayed(Duration(milliseconds: 500)).then((_) => setState(() {}));
   /// })
   /// ```
-  void animate([int duration = 500, Curve curve = Curves.linear]) => _styleModel
-    ..duration = Duration(milliseconds: duration)
-    ..curve = curve;
+  void animate([final int duration = 500, final Curve curve = Curves.linear]) =>
+      _styleModel
+        ..duration = Duration(milliseconds: duration)
+        ..curve = curve;
 
   // void add<T extends CoreStyle>(T style, {bool override = false}) =>
   //   _styleModel?.inject(style?._styleModel, override);
@@ -311,10 +335,7 @@ abstract class CoreStyle {
 }
 
 class ParentStyle extends CoreStyle {
-  ParentStyle({this.angleFormat = AngleFormat.cycles})
-      : super(angleFormat: angleFormat);
-
-  final AngleFormat angleFormat;
+  ParentStyle({super.angleFormat = AngleFormat.cycles});
 
   // TODO: implement
   // static ThemeDataModel<ParentStyle> themeData = ThemeDataModel<ParentStyle>();
@@ -323,7 +344,7 @@ class ParentStyle extends CoreStyle {
   /// ```dart
   /// ..add(ParentStyle()..width(100));
   /// ```
-  void add(ParentStyle parentStyle, {bool override = false}) =>
+  void add(final ParentStyle parentStyle, {final bool override = false}) =>
       _styleModel.inject(parentStyle._styleModel, override);
 
   /// Clone object
@@ -339,16 +360,14 @@ class ParentStyle extends CoreStyle {
 }
 
 class TxtStyle extends CoreStyle {
-  TxtStyle({AngleFormat angleFormat = AngleFormat.cycles})
-      : super(angleFormat: angleFormat);
+  TxtStyle({super.angleFormat});
 
   @override
   void _addListeners() {
     super._addListeners();
-    textAlign
-      ..addListener(() {
-        _textModel.textAlign = textAlign.exportTextAlign;
-      });
+    textAlign.addListener(() {
+      _textModel.textAlign = textAlign.exportTextAlign;
+    });
   }
 
   // TODO: implemet
@@ -358,45 +377,50 @@ class TxtStyle extends CoreStyle {
 
   final TextAlignModel textAlign = TextAlignModel();
 
-  void bold([bool enable = true]) {
-    if (enable == true) _textModel.fontWeight = FontWeight.bold;
+  void bold([final bool enable = true]) {
+    if (enable) {
+      _textModel.fontWeight = FontWeight.bold;
+    }
   }
 
-  void italic([bool enable = true]) {
-    if (enable == true) _textModel.fontStyle = FontStyle.italic;
+  void italic([final bool enable = true]) {
+    if (enable) {
+      _textModel.fontStyle = FontStyle.italic;
+    }
   }
 
-  void fontWeight(FontWeight weight) => _textModel.fontWeight = weight;
+  void fontWeight(final FontWeight weight) => _textModel.fontWeight = weight;
 
-  void fontSize(double fontSize) => _textModel.fontSize = fontSize;
+  void fontSize(final double fontSize) => _textModel.fontSize = fontSize;
 
-  void fontFamily(String font, {List<String>? fontFamilyFallback}) {
+  void fontFamily(final String font, {final List<String>? fontFamilyFallback}) {
     _textModel.fontFamily = font;
     _textModel.fontFamilyFallback = fontFamilyFallback;
   }
 
-  void textColor(Color textColor) => _textModel.textColor = textColor;
+  void textColor(final Color textColor) => _textModel.textColor = textColor;
 
-  void maxLines(int maxLines) => _textModel.maxLines = maxLines;
+  void maxLines(final int maxLines) => _textModel.maxLines = maxLines;
 
-  void letterSpacing(double space) => _textModel.letterSpacing = space;
+  void letterSpacing(final double space) => _textModel.letterSpacing = space;
 
-  void wordSpacing(double space) => _textModel.wordSpacing = space;
+  void wordSpacing(final double space) => _textModel.wordSpacing = space;
 
-  void textDecoration(TextDecoration decoration) =>
+  void textDecoration(final TextDecoration decoration) =>
       _textModel.textDecoration = decoration;
 
-  void textDirection(TextDirection textDirection) =>
+  void textDirection(final TextDirection textDirection) =>
       _textModel.textDirection = textDirection;
 
-  void textOverflow(TextOverflow textOverflow) =>
+  void textOverflow(final TextOverflow textOverflow) =>
       _textModel.textOverflow = textOverflow;
 
-  void textShadow(
-      {Color color = const Color(0x33000000),
-      double blur = 0.0,
-      Offset offset = Offset.zero}) {
-    _textModel.textShadow = [
+  void textShadow({
+    final Color color = const Color(0x33000000),
+    final double blur = 0.0,
+    final Offset offset = Offset.zero,
+  }) {
+    _textModel.textShadow = <Shadow>[
       Shadow(
         color: color,
         blurRadius: blur,
@@ -410,46 +434,55 @@ class TxtStyle extends CoreStyle {
   /// ```dart
   /// ..textElevation(30.0, color: Colors.grey, angle: 0.0)
   /// ```
-  void textElevation(double elevation,
-      {double angle = 0.0,
-      Color color = const Color(0x33000000),
-      double opacity = 1.0}) {
-    if (elevation == 0) return;
+  void textElevation(
+    final double elevation, {
+    final double angle = 0.0,
+    final Color color = const Color(0x33000000),
+    final double opacity = 1.0,
+  }) {
+    if (elevation == 0) {
+      return;
+    }
 
-    angle = angleToRadians(angle, angleFormat);
-    final double offsetX = sin(angle) * elevation;
-    final double offsetY = cos(angle) * elevation;
+    final double newAngle = angleToRadians(angle, angleFormat);
+    final double offsetX = sin(newAngle) * elevation;
+    final double offsetY = cos(newAngle) * elevation;
 
     // custom curve defining the opacity
     double calculatedOpacity = (0.5 - (sqrt(elevation) / 19)) * opacity;
-    if (calculatedOpacity < 0.0) calculatedOpacity = 0.0;
+    if (calculatedOpacity < 0.0) {
+      calculatedOpacity = 0.0;
+    }
 
     final Color colorWithOpacity = color.withOpacity(calculatedOpacity);
 
-    _textModel.textShadow = [
+    _textModel.textShadow = <Shadow>[
       Shadow(
-          color: colorWithOpacity,
-          blurRadius: elevation,
-          offset: Offset(offsetX, offsetY))
+        color: colorWithOpacity,
+        blurRadius: elevation,
+        offset: Offset(offsetX, offsetY),
+      )
     ];
   }
 
   /// Make the widget editable just like a TextField.
   ///
   /// If `focusNode` isnt spesified an internal `focusNode` will be initiated.
-  void editable(
-      {bool enable = true,
-      TextInputType? keyboardType,
-      String? placeholder,
-      bool obscureText = false,
-      bool autoFocus = false,
-      int? maxLines,
-      void Function(String)? onChange,
-      void Function(bool? focus)? onFocusChange,
-      void Function(TextSelection, SelectionChangedCause?)? onSelectionChanged,
-      void Function()? onEditingComplete,
-      FocusNode? focusNode}) {
-    if (enable == true)
+  void editable({
+    final bool enable = true,
+    final TextInputType? keyboardType,
+    final String? placeholder,
+    final bool obscureText = false,
+    final bool autoFocus = false,
+    final int? maxLines,
+    final void Function(String)? onChange,
+    final void Function(bool? focus)? onFocusChange,
+    final void Function(TextSelection, SelectionChangedCause?)?
+        onSelectionChanged,
+    final void Function()? onEditingComplete,
+    final FocusNode? focusNode,
+  }) {
+    if (enable) {
       _textModel
         ..editable = true
         ..keyboardType = keyboardType
@@ -462,13 +495,14 @@ class TxtStyle extends CoreStyle {
         ..onSelectionChanged = onSelectionChanged
         ..onEditingComplete = onEditingComplete
         ..focusNode = focusNode;
+    }
   }
 
   /// Combines style from another style instance
   /// ```dart
   /// ..add(TxtStyle()..width(100));
   /// ```
-  void add(TxtStyle? txtStyle, {bool override = false}) {
+  void add(final TxtStyle? txtStyle, {final bool override = false}) {
     if (txtStyle != null) {
       _styleModel.inject(txtStyle._styleModel, override);
       _textModel.inject(txtStyle._textModel, override);
@@ -499,14 +533,15 @@ class Gestures {
   ///   child: Text('Some text'),
   /// )
   /// ```
-  Gestures(
-      {this.behavior,
-      this.excludeFromSemantics = false,
-      this.dragStartBehavior = DragStartBehavior.start})
-      : this.gestureModel = GestureModel(
-            behavior: behavior,
-            excludeFromSemantics: excludeFromSemantics,
-            dragStartBehavior: dragStartBehavior);
+  Gestures({
+    this.behavior,
+    this.excludeFromSemantics = false,
+    this.dragStartBehavior = DragStartBehavior.start,
+  }) : gestureModel = GestureModel(
+          behavior: behavior,
+          excludeFromSemantics: excludeFromSemantics,
+          dragStartBehavior: dragStartBehavior,
+        );
 
   /// How this gesture detector should behave during hit testing.
   ///
@@ -556,102 +591,106 @@ class Gestures {
   /// ```dart
   /// ..isTap((isTapped) => setState(() => pressed = isTapped))
   /// ```
-  void isTap(void Function(bool) function) => gestureModel.isTap = function;
+  void isTap(final void Function(bool) function) =>
+      gestureModel.isTap = function;
 
-  void onTap(void Function() function) => gestureModel.onTap = function;
+  void onTap(final void Function() function) => gestureModel.onTap = function;
 
-  void onTapUp(void Function(TapUpDetails) function) =>
+  void onTapUp(final void Function(TapUpDetails) function) =>
       gestureModel.onTapUp = function;
 
-  void onTapDown(void Function(TapDownDetails) function) =>
+  void onTapDown(final void Function(TapDownDetails) function) =>
       gestureModel.onTapDown = function;
 
-  void onTapCancel(void Function() function) =>
+  void onTapCancel(final void Function() function) =>
       gestureModel.onTapCancel = function;
 
-  void onDoubleTap(void Function() function) =>
+  void onDoubleTap(final void Function() function) =>
       gestureModel.onDoubleTap = function;
 
-  void onLongPress(void Function() function) =>
+  void onLongPress(final void Function() function) =>
       gestureModel.onLongPress = function;
 
-  void onLongPressStart(void Function(LongPressStartDetails) function) =>
+  void onLongPressStart(final void Function(LongPressStartDetails) function) =>
       gestureModel.onLongPressStart = function;
 
-  void onLongPressEnd(void Function(LongPressEndDetails) function) =>
+  void onLongPressEnd(final void Function(LongPressEndDetails) function) =>
       gestureModel.onLongPressEnd = function;
 
   void onLongPressMoveUpdate(
-          void Function(LongPressMoveUpdateDetails) function) =>
+    final void Function(LongPressMoveUpdateDetails) function,
+  ) =>
       gestureModel.onLongPressMoveUpdate = function;
 
-  void onLongPressUp(void Function() function) =>
+  void onLongPressUp(final void Function() function) =>
       gestureModel.onLongPressUp = function;
 
-  void onVerticalDragStart(void Function(DragStartDetails) function) =>
+  void onVerticalDragStart(final void Function(DragStartDetails) function) =>
       gestureModel.onVerticalDragStart = function;
 
-  void onVerticalDragEnd(void Function(DragEndDetails) function) =>
+  void onVerticalDragEnd(final void Function(DragEndDetails) function) =>
       gestureModel.onVerticalDragEnd = function;
 
-  void onVerticalDragDown(void Function(DragDownDetails) function) =>
+  void onVerticalDragDown(final void Function(DragDownDetails) function) =>
       gestureModel.onVerticalDragDown = function;
 
-  void onVerticalDragCancel(void Function() function) =>
+  void onVerticalDragCancel(final void Function() function) =>
       gestureModel.onVerticalDragCancel = function;
 
-  void onVerticalDragUpdate(void Function(DragUpdateDetails) function) =>
+  void onVerticalDragUpdate(final void Function(DragUpdateDetails) function) =>
       gestureModel.onVerticalDragUpdate = function;
 
-  void onHorizontalDragStart(void Function(DragStartDetails) function) =>
+  void onHorizontalDragStart(final void Function(DragStartDetails) function) =>
       gestureModel.onHorizontalDragStart = function;
 
-  void onHorizontalDragEnd(void Function(DragEndDetails) function) =>
+  void onHorizontalDragEnd(final void Function(DragEndDetails) function) =>
       gestureModel.onHorizontalDragEnd = function;
 
-  void onHorizontalDragDown(void Function(DragDownDetails) function) =>
+  void onHorizontalDragDown(final void Function(DragDownDetails) function) =>
       gestureModel.onHorizontalDragDown = function;
 
-  void onHorizontalDragCancel(void Function() function) =>
+  void onHorizontalDragCancel(final void Function() function) =>
       gestureModel.onHorizontalDragCancel = function;
 
-  void onHorizontalDragUpdate(void Function(DragUpdateDetails) function) =>
+  void onHorizontalDragUpdate(
+    final void Function(DragUpdateDetails) function,
+  ) =>
       gestureModel.onHorizontalDragUpdate = function;
 
-  void onForcePressStart(void Function(ForcePressDetails) function) =>
+  void onForcePressStart(final void Function(ForcePressDetails) function) =>
       gestureModel.onForcePressStart = function;
 
-  void onForcePressEnd(void Function(ForcePressDetails) function) =>
+  void onForcePressEnd(final void Function(ForcePressDetails) function) =>
       gestureModel.onForcePressEnd = function;
 
-  void onForcePressPeak(void Function(ForcePressDetails) function) =>
+  void onForcePressPeak(final void Function(ForcePressDetails) function) =>
       gestureModel.onForcePressPeak = function;
 
-  void onForcePressUpdate(void Function(ForcePressDetails) function) =>
+  void onForcePressUpdate(final void Function(ForcePressDetails) function) =>
       gestureModel.onForcePressUpdate = function;
 
-  void onPanStart(void Function(DragStartDetails) function) =>
+  void onPanStart(final void Function(DragStartDetails) function) =>
       gestureModel.onPanStart = function;
 
-  void onPanEnd(void Function(DragEndDetails) function) =>
+  void onPanEnd(final void Function(DragEndDetails) function) =>
       gestureModel.onPanEnd = function;
 
-  void onPanCancel(void Function() function) =>
+  void onPanCancel(final void Function() function) =>
       gestureModel.onPanCancel = function;
 
-  void onPanDown(void Function(DragDownDetails) function) =>
+  void onPanDown(final void Function(DragDownDetails) function) =>
       gestureModel.onPanDown = function;
 
-  void onPanUpdate(void Function(DragUpdateDetails) function) =>
+  void onPanUpdate(final void Function(DragUpdateDetails) function) =>
       gestureModel.onPanUpdate = function;
 
-  void onScaleStart(void Function(ScaleStartDetails) function) =>
+  void onScaleStart(final void Function(ScaleStartDetails) function) =>
       gestureModel.onScaleStart = function;
 
-  void onScaleEnd(void Function(ScaleEndDetails) function) =>
+  void onScaleEnd(final void Function(ScaleEndDetails) function) =>
       gestureModel.onScaleEnd = function;
 
-  void onScaleUpdate(void Function(ScaleUpdateDetails) function) =>
+  void onScaleUpdate(final void Function(ScaleUpdateDetails) function) =>
       gestureModel.onScaleUpdate = function;
 
   GestureModel get exportGesture => gestureModel;

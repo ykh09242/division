@@ -1,11 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:division/division.dart';
+import 'package:flutter/material.dart';
 
-void main() => runApp(Main());
+void main() => runApp(const Main());
 
 class Main extends StatelessWidget {
+  const Main({super.key});
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         body: Home(),
@@ -15,6 +17,8 @@ class Main extends StatelessWidget {
 }
 
 class Home extends StatelessWidget {
+  Home({super.key});
+
   final TxtStyle titleStyle = TxtStyle()
     ..padding(vertical: 30.0, horizontal: 20.0)
     ..bold()
@@ -55,8 +59,8 @@ class Home extends StatelessWidget {
     ..fontSize(22)
     ..textAlign.left();
 
-  final colorCardStyle =
-      (ParentStyle tasksCard, Color color) => tasksCard.clone()
+  ParentStyle colorCardStyle(final ParentStyle tasksCard, final Color color) =>
+      tasksCard.clone()
         ..background.color(color)
         ..elevation(20, color: color.withOpacity(0.5));
 
@@ -66,10 +70,10 @@ class Home extends StatelessWidget {
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: <Widget>[
-          Parent(style: colorCardStyle(tasksCard, Color(0xFFFFB85D))),
-          Parent(style: colorCardStyle(tasksCard, Color(0xFFFD5C63))),
-          Parent(style: colorCardStyle(tasksCard, Color(0xFF828AFF))),
-          Parent(style: colorCardStyle(tasksCard, Color(0xFF55ffff))),
+          Parent(style: colorCardStyle(tasksCard, const Color(0xFFFFB85D))),
+          Parent(style: colorCardStyle(tasksCard, const Color(0xFFFD5C63))),
+          Parent(style: colorCardStyle(tasksCard, const Color(0xFF828AFF))),
+          Parent(style: colorCardStyle(tasksCard, const Color(0xFF55ffff))),
         ],
       ),
     );
@@ -89,7 +93,7 @@ class Home extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return SafeArea(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

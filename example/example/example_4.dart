@@ -1,12 +1,14 @@
 import 'package:division/division.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(Main());
+void main() => runApp(const Main());
 
 class Main extends StatelessWidget {
+  const Main({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(final BuildContext context) {
+    return const MaterialApp(
       home: Scaffold(
         body: ElevationDemo(),
       ),
@@ -15,7 +17,9 @@ class Main extends StatelessWidget {
 }
 
 class ElevationDemo extends StatelessWidget {
-  final boxStyle = (double elevation) => TxtStyle()
+  const ElevationDemo({super.key});
+
+  TxtStyle boxStyle(final double elevation) => TxtStyle()
     ..elevation(elevation)
     ..width(300)
     ..height(50)
@@ -29,7 +33,7 @@ class ElevationDemo extends StatelessWidget {
     ..bold();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[

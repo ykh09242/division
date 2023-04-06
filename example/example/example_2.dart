@@ -1,12 +1,14 @@
 import 'package:division/division.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(Main());
+void main() => runApp(const Main());
 
 class Main extends StatelessWidget {
+  const Main({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(final BuildContext context) {
+    return const MaterialApp(
       home: Scaffold(
         body: FrostedWidget(),
       ),
@@ -15,18 +17,20 @@ class Main extends StatelessWidget {
 }
 
 class FrostedWidget extends StatefulWidget {
+  const FrostedWidget({super.key});
+
   @override
-  _FrostedWidgetState createState() => _FrostedWidgetState();
+  State<FrostedWidget> createState() => _FrostedWidgetState();
 }
 
 class _FrostedWidgetState extends State<FrostedWidget> {
   bool pressed = false;
 
-  final backgroundStyle = ParentStyle()
+  final ParentStyle backgroundStyle = ParentStyle()
     ..background
         .image(url: 'https://i.imgur.com/SqZ5JTv.jpg', fit: BoxFit.cover);
 
-  final cardStyle = (pressed) => TxtStyle()
+  TxtStyle cardStyle(final bool pressed) => TxtStyle()
     ..alignment.center()
     ..alignmentContent.center()
     ..width(300)
@@ -42,7 +46,7 @@ class _FrostedWidgetState extends State<FrostedWidget> {
     ..fontSize(32);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Stack(
       children: <Widget>[
         Parent(style: backgroundStyle),
@@ -50,7 +54,9 @@ class _FrostedWidgetState extends State<FrostedWidget> {
           'My frosted widget',
           style: cardStyle(pressed),
           gesture: Gestures()
-            ..isTap((isTapped) => setState(() => pressed = isTapped)),
+            ..isTap(
+              (final bool isTapped) => setState(() => pressed = isTapped),
+            ),
         ),
       ],
     );

@@ -2,13 +2,13 @@
 import 'package:flutter/material.dart';
 
 class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.toUpperCase().replaceAll("#", "");
+  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+
+  static int _getColorFromHex(final String hexColor) {
+    String newHexColor = hexColor.toUpperCase().replaceAll('#', '');
     if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
+      newHexColor = 'FF$newHexColor';
     }
     return int.parse(hexColor, radix: 16);
   }
-
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
 }
